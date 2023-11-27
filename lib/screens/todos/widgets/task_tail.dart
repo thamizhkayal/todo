@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:todo/constants/db_collection.dart';
 import 'package:todo/constants/my_colors.dart';
 import 'package:todo/helpers/my_date_helper.dart';
 import 'package:todo/task_model.dart';
@@ -28,7 +30,12 @@ class TaskTail extends StatelessWidget {
         icon: Icon(
             taskModel.status ? Icons.check_box : Icons.check_box_outline_blank),
         splashRadius: 25.r,
-        onPressed: () {},
+        onPressed: () {
+          FirebaseFirestore.instance
+              .collection(DBCollection.kTaskCollection)
+              .doc(taskModel.id)
+              .update({"status": !taskModel.status});
+        },
       ),
       onTap: () {
         print(taskModel.id);

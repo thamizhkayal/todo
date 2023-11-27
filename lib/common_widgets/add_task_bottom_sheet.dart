@@ -22,43 +22,40 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     TaskProvider taskProvider = Provider.of<TaskProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: Column(
-          children: [
-            TextField(controller: taskController),
-            Row(
-              children: [
-                Text(MyDateHelper.ddMMyyyy(date: myDate ?? DateTime.now())),
-                IconButton(
-                  onPressed: () async {
-                    DateTime? pickedDate =
-                        await MyPickerHelper.datePicker(context);
-                    myDate = pickedDate;
-                    setState(() {});
-                  },
-                  icon: Icon(Icons.date_range),
-                ),
-              ],
-            ),
-            ElevatedButton(
+      child: Column(
+        children: [
+          TextField(controller: taskController),
+          Row(
+            children: [
+              Text(MyDateHelper.ddMMyyyy(date: myDate ?? DateTime.now())),
+              IconButton(
                 onPressed: () async {
-                  Map<String, dynamic> taskData = {
-                    "task": taskController.text,
-                    "date": '$myDate',
-                    'status': false,
-                  };
-                  print(taskData);
-                  await taskProvider.addTask(taskData: taskData);
-                  await taskProvider.getAllTask();
-                  if (context.mounted) {
-                    MyMessageHelper.snackBar(context,
-                        message: "Task Successfully Added");
-                    Navigator.pop(context);
-                  }
+                  DateTime? pickedDate =
+                      await MyPickerHelper.datePicker(context);
+                  myDate = pickedDate;
+                  setState(() {});
                 },
-                child: Text("Add Task"))
-          ],
-        ),
+                icon: const Icon(Icons.date_range),
+              ),
+            ],
+          ),
+          ElevatedButton(
+              onPressed: () async {
+                Map<String, dynamic> taskData = {
+                  "task": taskController.text,
+                  "date": myDate ?? DateTime.now(),
+                  'status': false,
+                };
+
+                await taskProvider.addTask(taskData: taskData);
+                if (context.mounted) {
+                  MyMessageHelper.snackBar(context,
+                      message: "Task Successfully Added");
+                  Navigator.pop(context);
+                }
+              },
+              child: Text("Add Task"))
+        ],
       ),
     );
   }
