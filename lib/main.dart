@@ -1,18 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/providers/task_provider.dart';
 import 'package:todo/providers/theme_provider.dart';
+import 'package:todo/screens/auth/login_page.dart';
 import 'package:todo/screens/todos/home_page.dart';
 
 import 'firebase_options.dart';
 
+late final FirebaseApp app;
+late final FirebaseAuth auth;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  auth = FirebaseAuth.instanceFor(app: app);
   runApp(const MyApp());
 }
 
@@ -36,7 +41,16 @@ class MyApp extends StatelessWidget {
             child: child!,
           );
         },
-        child: HomePage(),
+        child: StreamBuilder<User?>(
+          stream: auth.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HomePage();
+            } else {
+              return LoginPage();
+            }
+          },
+        ),
       ),
     );
   }
