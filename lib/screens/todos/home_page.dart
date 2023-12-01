@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/common_widgets/add_task_bottom_sheet.dart';
 import 'package:todo/constants/db_collection.dart';
 import 'package:todo/constants/my_colors.dart';
+import 'package:todo/main.dart';
 import 'package:todo/providers/task_provider.dart';
 import 'package:todo/screens/todos/widgets/task_tail.dart';
 import 'package:todo/task_model.dart';
@@ -27,6 +28,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          Text("Logout"),
           IconButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
@@ -52,6 +54,7 @@ class HomePage extends StatelessWidget {
           stream: FirebaseFirestore.instance
               .collection(DBCollection.kTaskCollection)
               .orderBy("date")
+              .where('email', isEqualTo: '${auth.currentUser?.email}')
               .snapshots(),
           builder: (_, snapshot) {
             if (!snapshot.hasData) {

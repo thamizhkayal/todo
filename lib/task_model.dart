@@ -1,6 +1,7 @@
 class TaskModel {
   final String id;
   final String task;
+  final String email;
   final DateTime date;
   final bool status;
 
@@ -8,6 +9,7 @@ class TaskModel {
       {required this.id,
       required this.task,
       required this.date,
+      required this.email,
       this.status = false});
 
   factory TaskModel.fromMap(data) {
@@ -15,6 +17,7 @@ class TaskModel {
     return TaskModel(
         id: data['docId'],
         task: data['task'],
+        email: data['email'],
         date: dbData,
         status: data['status']);
   }

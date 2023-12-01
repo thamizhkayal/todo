@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/helpers/my_date_helper.dart';
 import 'package:todo/helpers/my_message_helper.dart';
 import 'package:todo/helpers/my_picker_helper.dart';
+import 'package:todo/main.dart';
 import 'package:todo/providers/task_provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -45,6 +47,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   "task": taskController.text,
                   "date": myDate ?? DateTime.now(),
                   'status': false,
+                  "email": auth.currentUser!.email
                 };
 
                 await taskProvider.addTask(taskData: taskData);
