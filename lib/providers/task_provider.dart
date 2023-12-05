@@ -12,4 +12,15 @@ class TaskProvider extends ChangeNotifier {
   addTask({required Map<String, dynamic> taskData}) async {
     await _fs.collection(DBCollection.kTaskCollection).add(taskData);
   }
+
+  toggleComplete({required TaskModel taskModel}) {
+    _fs
+        .collection(DBCollection.kTaskCollection)
+        .doc(taskModel.id)
+        .update({"status": !taskModel.status});
+  }
+
+  deleteTask({required TaskModel taskModel}) {
+    _fs.collection(DBCollection.kTaskCollection).doc(taskModel.id).delete();
+  }
 }

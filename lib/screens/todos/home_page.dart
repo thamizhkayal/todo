@@ -27,8 +27,9 @@ class HomePage extends StatelessWidget {
     TaskProvider taskProvider = Provider.of<TaskProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+        title: Text("Today Task"),
         actions: [
-          Text("Logout"),
           IconButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
@@ -53,7 +54,7 @@ class HomePage extends StatelessWidget {
         child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection(DBCollection.kTaskCollection)
-              .orderBy("date")
+              .orderBy("date", descending: false)
               .where('email', isEqualTo: '${auth.currentUser?.email}')
               .snapshots(),
           builder: (_, snapshot) {
